@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ post.title }}</h2>
+<p>{{ post.content }}</p>
+<small>author: {{ post.author.username }}</small>
+
+{% if current_user == post.author %}
+    <p>
+      <a href="{{ url_for('edit_post', post_id=post.id) }}">Edit</a> |
+      <a href="{{ url_for('delete_post', post_id=post.id) }}">Delete</a>
+    </p>
+{% endif %}
+
+<hr>
+<h3></h3>
+{% for c in comments %}
+  <p><b>{{ c.writer.username }}</b>: {{ c.text }}</p>
+{% else %}
+  <p>No comments yet..</p>
+{% endfor %}
+
+{% if current_user.is_authenticated %}
+<form method="post">
+  <textarea name="text" placeholder="comments..." required></textarea><br>
+  <button type="submit">Add</button>
+</form>
+{% else %}
+  <p><a href="{{ url_for('login') }}">Come in.</a> To write a comment.</p>
+{% endif %}
+{% endblock %}
